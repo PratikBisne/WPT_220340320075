@@ -1,0 +1,102 @@
+<html>
+<body>
+
+<input type="text" name="bookid" id="bid" placeholder="bookid">
+<span id="msg"></span><br>
+<input type="text" name="bookname" id="bname" placeholder="bookname"><br>
+<input type="text" name="price" id="Prc" placeholder="price"><br>
+<input type="button" id="ubtn" value="update">
+
+
+</body>
+
+<script src="jquery-3.5.1.min.js"></script>
+<script>//our scrip will come here 
+
+
+
+$(document).ready(()=>{
+console.log("no more sins");
+
+$('#bid').blur(()=>{
+	console.log("blur happened");
+	let input = {bid: $('#bid').val()}
+
+	let parameters = {
+			data: input,
+			url: 'http://localhost:8081/getbook',
+			type:'get',
+			datatype:'json',
+
+			success:(data)=>{
+				console.log(data)
+				if(data.status === true){
+					$('#msg').text('bookid is found');
+					$('#bname').val(data.detail.bookname)
+					$('#Prc').val(data.detail.price)
+				}
+				else{
+					$('#msg').text('bookid not found');
+					$('#bname').val("")
+					$('#Prc').val("")
+				}
+			},
+			error:function(error){
+				console.log("error"+error);
+			}
+		}
+
+		$.ajax(parameters);
+	});
+	
+	$("#ubtn").click(function () 
+	{ 
+		console.log("jquery works");
+		
+		let input = {bookid: $('#bid').val(),bookname: $('#bname').val(),price: $('#Prc').val()}
+
+		let parameters = {
+			data: input,
+			url: 'http://localhost:8081/updateprice',
+			type:'get',
+			datatype:'json',
+
+			success: function (data){
+				console.log("data fetched");
+				console.log(data);
+
+				if(data.status===true){
+					$('#msg').text("price updated")
+				}
+				else{
+					$('#Prc').val("");
+					$('#msg').text("price not updated")
+				}
+			},
+			error:function(error){
+				console.log("error"+ error);
+			}
+		}
+
+		$.ajax(parameters);
+	});
+	
+
+
+});
+
+
+
+
+
+
+
+</script>
+
+
+</html>
+
+
+
+
+
